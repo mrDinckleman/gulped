@@ -1,0 +1,17 @@
+{
+  "name": "gulped",
+  "version": "0.1.0",
+  "description": "Gulp-based project template",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "gulp"
+  ],
+  "author": "Sergey Kovalchuk <iam@mrdi.tk>",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^4.0.0"
+  }
+}
