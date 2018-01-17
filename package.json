@@ -1,17 +1,21 @@
 {
   "name": "gulped",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Gulp-based project template",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "gulp"
+    "gulp",
+    "template"
   ],
   "author": "Sergey Kovalchuk <iam@mrdi.tk>",
   "license": "ISC",
   "devDependencies": {
-    "gulp": "^4.0.0"
-  }
+    "gulp": "^4.0.0",
+    "gulp-sass": "^3.1.0",
+    "gulp-sourcemaps": "^2.6.3"
+  },
+  "private": true
 }
