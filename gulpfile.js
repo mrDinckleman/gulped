@@ -1,6 +1,7 @@
 var gulp = require('gulp'),
   ejs = require('gulp-ejs'),
   data = require('gulp-data'),
+  htmlComb = require('gulp-htmlcomb'),
   sass = require('gulp-sass'),
   sourceMaps = require('gulp-sourcemaps'),
   path = require('path'),
@@ -12,6 +13,7 @@ gulp.task('ejs', function () {
       return JSON.parse(fs.readFileSync(file.path.substr(0, file.path.indexOf(file.extname)) + '.json'));
     }))
     .pipe(ejs({}, {}, { ext: '.html' }))
+    .pipe(htmlComb())
     .pipe(gulp.dest('public'));
 });
 

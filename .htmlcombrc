@@ -1,0 +1,22 @@
+{
+  "requireDoubleQuotationMarks": true,
+  "replaceSingleQuotationMarks": true,
+  "removeEmptyValues": true,
+  "removeNewlines": true,
+  "removeMultipleSpaces": true,
+  "order": [
+    "class",
+    "id",
+    "name",
+    "data",
+    "src",
+    "for",
+    "type",
+    "href",
+    "value",
+    "title",
+    "alt",
+    "role",
+    "aria"
+  ]
+}
