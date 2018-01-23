@@ -25,4 +25,9 @@ gulp.task('sass', function () {
     .pipe(gulp.dest('public/assets/css'));
 });
 
-gulp.task('default', gulp.series('sass'));
+gulp.task('watch', function() {
+  gulp.watch(['app/views/**/*.ejs', 'app/views/*.json'], gulp.series('ejs'));
+  gulp.watch('app/styles/**/*.scss', gulp.series('sass'));
+});
+
+gulp.task('default', gulp.series('ejs', 'sass', 'watch'));
