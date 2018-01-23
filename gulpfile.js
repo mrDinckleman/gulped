@@ -3,6 +3,9 @@ var gulp = require('gulp'),
   data = require('gulp-data'),
   htmlComb = require('gulp-htmlcomb'),
   sass = require('gulp-sass'),
+  postCss = require('gulp-postcss'),
+  autoPrefixer = require('autoprefixer'),
+  normalize = require('postcss-normalize'),
   sourceMaps = require('gulp-sourcemaps'),
   path = require('path'),
   fs = require('fs');
@@ -20,7 +23,8 @@ gulp.task('ejs', function () {
 gulp.task('sass', function () {
   return gulp.src('app/styles/*.scss')
     .pipe(sourceMaps.init())
-      .pipe(sass().on('error', sass.logError))
+    .pipe(sass().on('error', sass.logError))
+    .pipe(postCss([ autoPrefixer(), normalize() ]))
     .pipe(sourceMaps.write('./'))
     .pipe(gulp.dest('public/assets/css'));
 });
