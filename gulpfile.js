@@ -6,26 +6,44 @@ var gulp = require('gulp'),
   postCss = require('gulp-postcss'),
   autoPrefixer = require('autoprefixer'),
   normalize = require('postcss-normalize'),
+  cssNano = require('cssnano'),
+  gulpIf = require('gulp-if'),
+  lazyPipe = require('lazypipe'),
   sourceMaps = require('gulp-sourcemaps'),
+  rename = require('gulp-rename'),
+  del = require('del'),
   path = require('path'),
   fs = require('fs');
+
+var isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 
 gulp.task('ejs', function () {
   return gulp.src('app/views/*.ejs')
     .pipe(data(function (file) {
       return JSON.parse(fs.readFileSync(file.path.substr(0, file.path.indexOf(file.extname)) + '.json'));
     }))
-    .pipe(ejs({}, {}, { ext: '.html' }))
+    .pipe(ejs({ production: !isDevelopment }, {}, { ext: '.html' }))
     .pipe(htmlComb())
     .pipe(gulp.dest('public'));
 });
 
 gulp.task('sass', function () {
+  // because of issue https://github.com/OverZealous/lazypipe/issues/14
+  // lazypipe will not finish task when placed on the end of pipe queue
+  // so gulp.dest was moved to beginning for proper stop
+  var cssMinify = lazyPipe()
+    .pipe(gulp.dest, 'public/assets/css') // saves non-minified version
+    .pipe(postCss, [ cssNano() ])
+    .pipe(rename, { suffix: '.min' });
+
   return gulp.src('app/styles/*.scss')
-    .pipe(sourceMaps.init())
+    .pipe(gulpIf(isDevelopment, sourceMaps.init()))
     .pipe(sass().on('error', sass.logError))
     .pipe(postCss([ autoPrefixer(), normalize() ]))
-    .pipe(sourceMaps.write('./'))
+    .pipe(gulpIf(isDevelopment, sourceMaps.write('./')))
+    .pipe(gulpIf(!isDevelopment, cssMinify()))
+    // saves non-minified files in the case of development
+    // and minified files in the case of production
     .pipe(gulp.dest('public/assets/css'));
 });
 
@@ -34,4 +52,10 @@ gulp.task('watch', function() {
   gulp.watch('app/styles/**/*.scss', gulp.series('sass'));
 });
 
+gulp.task('clean', function() {
+  return del(['public']);
+});
+
 gulp.task('default', gulp.series('ejs', 'sass', 'watch'));
+
+gulp.task('build', gulp.series('clean', 'ejs', 'sass'));
