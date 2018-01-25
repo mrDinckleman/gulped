@@ -10,6 +10,7 @@ var gulp = require('gulp'),
   gulpIf = require('gulp-if'),
   lazyPipe = require('lazypipe'),
   sourceMaps = require('gulp-sourcemaps'),
+  browserSync = require('browser-sync'),
   rename = require('gulp-rename'),
   del = require('del'),
   path = require('path'),
@@ -24,7 +25,8 @@ gulp.task('ejs', function () {
     }))
     .pipe(ejs({ production: !isDevelopment }, {}, { ext: '.html' }))
     .pipe(htmlComb())
-    .pipe(gulp.dest('public'));
+    .pipe(gulp.dest('public'))
+    .pipe(browserSync.stream());
 });
 
 gulp.task('sass', function () {
@@ -44,10 +46,17 @@ gulp.task('sass', function () {
     .pipe(gulpIf(!isDevelopment, cssMinify()))
     // saves non-minified files in the case of development
     // and minified files in the case of production
-    .pipe(gulp.dest('public/assets/css'));
+    .pipe(gulp.dest('public/assets/css'))
+    .pipe(browserSync.stream());
 });
 
 gulp.task('watch', function() {
+  browserSync.init({
+    server: {
+      baseDir: './public'
+    }
+  });
+
   gulp.watch(['app/views/**/*.ejs', 'app/views/*.json'], gulp.series('ejs'));
   gulp.watch('app/styles/**/*.scss', gulp.series('sass'));
 });
