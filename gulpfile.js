@@ -5,7 +5,7 @@ var gulp = require('gulp'),
   sass = require('gulp-sass'),
   postCss = require('gulp-postcss'),
   autoPrefixer = require('autoprefixer'),
-  normalize = require('postcss-normalize'),
+  atImport = require('postcss-import'),
   cssNano = require('cssnano'),
   gulpIf = require('gulp-if'),
   lazyPipe = require('lazypipe'),
@@ -41,7 +41,7 @@ gulp.task('sass', function () {
   return gulp.src('app/styles/*.scss')
     .pipe(gulpIf(isDevelopment, sourceMaps.init()))
     .pipe(sass().on('error', sass.logError))
-    .pipe(postCss([ autoPrefixer(), normalize() ]))
+    .pipe(postCss([ autoPrefixer(), atImport() ]))
     .pipe(gulpIf(isDevelopment, sourceMaps.write('./')))
     .pipe(gulpIf(!isDevelopment, cssMinify()))
     // saves non-minified files in the case of development
