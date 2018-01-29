@@ -18,7 +18,18 @@ var gulp = require('gulp'),
 
 var isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 
-gulp.task('ejs', function () {
+var paths = {
+  views: {
+    src: 'app/views/*.ejs',
+    dist: 'public'
+  },
+  styles: {
+    src: 'app/styles/*.scss',
+    dist: 'public/assets/css'
+  }
+};
+
+gulp.task('views', function () {
   function getData(file) {
     try {
       return JSON.parse(fs.readFileSync(file));
@@ -28,7 +39,7 @@ gulp.task('ejs', function () {
     return {};
   }
 
-  return gulp.src('app/views/*.ejs')
+  return gulp.src(paths.views.src)
     .pipe(data(function (file) {
       var data = getData(file.path.substr(0, file.path.indexOf(file.extname)) + '.json'),
           global = getData('app/views/global.json');
@@ -36,20 +47,20 @@ gulp.task('ejs', function () {
     }))
     .pipe(ejs({ production: !isDevelopment }, {}, { ext: '.html' }))
     .pipe(htmlComb())
-    .pipe(gulp.dest('public'))
+    .pipe(gulp.dest(paths.views.dist))
     .pipe(browserSync.stream());
 });
 
-gulp.task('sass', function () {
+gulp.task('styles', function () {
   // because of issue https://github.com/OverZealous/lazypipe/issues/14
   // lazypipe will not finish task when placed on the end of pipe queue
   // so gulp.dest was moved to beginning for proper stop
   var cssMinify = lazyPipe()
-    .pipe(gulp.dest, 'public/assets/css') // saves non-minified version
+    .pipe(gulp.dest, paths.styles.dist) // saves non-minified version
     .pipe(postCss, [ cssNano() ])
     .pipe(rename, { suffix: '.min' });
 
-  return gulp.src('app/styles/*.scss')
+  return gulp.src(paths.styles.src)
     .pipe(gulpIf(isDevelopment, sourceMaps.init()))
     .pipe(sass().on('error', sass.logError))
     .pipe(postCss([ autoPrefixer(), atImport() ]))
@@ -57,7 +68,7 @@ gulp.task('sass', function () {
     .pipe(gulpIf(!isDevelopment, cssMinify()))
     // saves non-minified files in the case of development
     // and minified files in the case of production
-    .pipe(gulp.dest('public/assets/css'))
+    .pipe(gulp.dest(paths.styles.dist))
     .pipe(browserSync.stream());
 });
 
@@ -68,14 +79,14 @@ gulp.task('watch', function() {
     }
   });
 
-  gulp.watch(['app/views/**/*.ejs', 'app/views/*.json'], gulp.series('ejs'));
-  gulp.watch('app/styles/**/*.scss', gulp.series('sass'));
+  gulp.watch(['app/views/**/*.ejs', 'app/views/*.json'], gulp.series('views'));
+  gulp.watch('app/styles/**/*.scss', gulp.series('styles'));
 });
 
 gulp.task('clean', function() {
   return del(['public']);
 });
 
-gulp.task('default', gulp.series('ejs', 'sass', 'watch'));
+gulp.task('default', gulp.series('views', 'styles', 'watch'));
 
-gulp.task('build', gulp.series('clean', 'ejs', 'sass'));
+gulp.task('build', gulp.series('clean', 'views', 'styles'));
