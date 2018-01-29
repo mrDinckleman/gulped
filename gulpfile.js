@@ -19,9 +19,20 @@ var gulp = require('gulp'),
 var isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 
 gulp.task('ejs', function () {
+  function getData(file) {
+    try {
+      return JSON.parse(fs.readFileSync(file));
+    } catch (err) {
+      console.warn('Invalid JSON in ' + file);
+    }
+    return {};
+  }
+
   return gulp.src('app/views/*.ejs')
     .pipe(data(function (file) {
-      return JSON.parse(fs.readFileSync(file.path.substr(0, file.path.indexOf(file.extname)) + '.json'));
+      var data = getData(file.path.substr(0, file.path.indexOf(file.extname)) + '.json'),
+          global = getData('app/views/global.json');
+      return Object.assign({}, global, data);
     }))
     .pipe(ejs({ production: !isDevelopment }, {}, { ext: '.html' }))
     .pipe(htmlComb())
