@@ -2,6 +2,7 @@ var gulp = require('gulp'),
   ejs = require('gulp-ejs'),
   data = require('gulp-data'),
   htmlComb = require('gulp-htmlcomb'),
+  cssComb = require('gulp-csscomb'),
   sass = require('gulp-sass'),
   postCss = require('gulp-postcss'),
   autoPrefixer = require('autoprefixer'),
@@ -51,6 +52,12 @@ gulp.task('views', function () {
     .pipe(browserSync.stream());
 });
 
+gulp.task('csscomb', function() {
+  return gulp.src(paths.styles.src)
+    .pipe(cssComb())
+    .pipe(gulp.dest('app/styles'));
+});
+
 gulp.task('styles', function () {
   // because of issue https://github.com/OverZealous/lazypipe/issues/14
   // lazypipe will not finish task when placed on the end of pipe queue
@@ -89,4 +96,4 @@ gulp.task('clean', function() {
 
 gulp.task('default', gulp.series('views', 'styles', 'watch'));
 
-gulp.task('build', gulp.series('clean', 'views', 'styles'));
+gulp.task('build', gulp.series('clean', 'views', 'csscomb', 'styles'));
