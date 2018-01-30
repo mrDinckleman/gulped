@@ -4,6 +4,7 @@ var gulp = require('gulp'),
   htmlComb = require('gulp-htmlcomb'),
   cssComb = require('gulp-csscomb'),
   sass = require('gulp-sass'),
+  header = require('gulp-header'),
   postCss = require('gulp-postcss'),
   autoPrefixer = require('autoprefixer'),
   atImport = require('postcss-import'),
@@ -29,6 +30,12 @@ var paths = {
     dist: 'public/assets/css'
   }
 };
+
+var banner = '/*!\n' +
+  ' * <%= pkg.name %> v<%= pkg.version %><% if (pkg.homepage) { %> (<%= pkg.homepage %>)<% } %>\n' +
+  ' * <%= pkg.author %> <%= new Date().getFullYear() %>\n' +
+  ' */\n',
+  pkg = require('./package.json');
 
 gulp.task('views', function () {
   function getData(file) {
@@ -70,6 +77,7 @@ gulp.task('styles', function () {
   return gulp.src(paths.styles.src)
     .pipe(gulpIf(isDevelopment, sourceMaps.init()))
     .pipe(sass().on('error', sass.logError))
+    .pipe(header(banner, { pkg: pkg }))
     .pipe(postCss([ autoPrefixer(), atImport() ]))
     .pipe(gulpIf(isDevelopment, sourceMaps.write('./')))
     .pipe(gulpIf(!isDevelopment, cssMinify()))

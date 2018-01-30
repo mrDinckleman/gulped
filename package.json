@@ -1,8 +1,7 @@
 {
   "name": "gulped",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "description": "Gulp-based project template",
-  "main": "index.js",
   "scripts": {
     "start": "gulp",
     "build": "set NODE_ENV=production && gulp build",
@@ -12,6 +11,7 @@
     "gulp",
     "template"
   ],
+  "homepage": "https://github.com/mrDinckleman",
   "author": "Sergey Kovalchuk <admin@vitam.in.ua>",
   "license": "ISC",
   "devDependencies": {
@@ -23,6 +23,7 @@
     "gulp-csscomb": "^3.0.8",
     "gulp-data": "^1.3.1",
     "gulp-ejs": "^3.1.1",
+    "gulp-header": "^2.0.1",
     "gulp-htmlcomb": "^0.1.0",
     "gulp-if": "^2.0.2",
     "gulp-postcss": "^7.0.1",
