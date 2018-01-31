@@ -12,6 +12,7 @@ var gulp = require('gulp'),
   gulpIf = require('gulp-if'),
   lazyPipe = require('lazypipe'),
   sourceMaps = require('gulp-sourcemaps'),
+  imageMin = require('gulp-imagemin'),
   browserSync = require('browser-sync').create(),
   rename = require('gulp-rename'),
   del = require('del'),
@@ -23,11 +24,15 @@ var isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV === 'developme
 var paths = {
   views: {
     src: 'app/views/*.ejs',
-    dist: 'public'
+    dest: 'public'
   },
   styles: {
     src: 'app/styles/*.scss',
-    dist: 'public/assets/css'
+    dest: 'public/assets/css'
+  },
+  images: {
+    src: 'app/images/**/*',
+    dest: 'public/assets/images'
   }
 };
 
@@ -55,7 +60,7 @@ gulp.task('views', function () {
     }))
     .pipe(ejs({ production: !isDevelopment }, {}, { ext: '.html' }))
     .pipe(htmlComb())
-    .pipe(gulp.dest(paths.views.dist))
+    .pipe(gulp.dest(paths.views.dest))
     .pipe(browserSync.stream());
 });
 
@@ -70,7 +75,7 @@ gulp.task('styles', function () {
   // lazypipe will not finish task when placed on the end of pipe queue
   // so gulp.dest was moved to beginning for proper stop
   var cssMinify = lazyPipe()
-    .pipe(gulp.dest, paths.styles.dist) // saves non-minified version
+    .pipe(gulp.dest, paths.styles.dest) // saves non-minified version
     .pipe(postCss, [ cssNano() ])
     .pipe(rename, { suffix: '.min' });
 
@@ -83,7 +88,14 @@ gulp.task('styles', function () {
     .pipe(gulpIf(!isDevelopment, cssMinify()))
     // saves non-minified files in the case of development
     // and minified files in the case of production
-    .pipe(gulp.dest(paths.styles.dist))
+    .pipe(gulp.dest(paths.styles.dest))
+    .pipe(browserSync.stream());
+});
+
+gulp.task('images', function() {
+  return gulp.src(paths.images.src)
+    .pipe(gulpIf(!isDevelopment, imageMin()))
+    .pipe(gulp.dest(paths.images.dest))
     .pipe(browserSync.stream());
 });
 
@@ -96,12 +108,13 @@ gulp.task('watch', function() {
 
   gulp.watch(['app/views/**/*.ejs', 'app/views/*.json'], gulp.series('views'));
   gulp.watch('app/styles/**/*.scss', gulp.series('styles'));
+  gulp.watch('app/images/**/*', gulp.series('images'));
 });
 
 gulp.task('clean', function() {
   return del(['public']);
 });
 
-gulp.task('default', gulp.series('views', 'styles', 'watch'));
+gulp.task('default', gulp.series('views', 'styles', 'images', 'watch'));
 
-gulp.task('build', gulp.series('clean', 'views', 'csscomb', 'styles'));
+gulp.task('build', gulp.series('clean', 'views', 'csscomb', 'styles', 'images'));

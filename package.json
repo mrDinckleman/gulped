@@ -1,6 +1,6 @@
 {
   "name": "gulped",
-  "version": "0.3.11",
+  "version": "0.4.0",
   "description": "Gulp-based project template",
   "scripts": {
     "start": "gulp",
@@ -26,6 +26,7 @@
     "gulp-header": "^2.0.1",
     "gulp-htmlcomb": "^0.1.0",
     "gulp-if": "^2.0.2",
+    "gulp-imagemin": "^4.1.0",
     "gulp-postcss": "^7.0.1",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^3.1.0",
