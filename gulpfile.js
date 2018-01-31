@@ -23,15 +23,15 @@ var isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV === 'developme
 
 var paths = {
   views: {
-    src: 'app/views/*.ejs',
+    src: 'app/views',
     dest: 'public'
   },
   styles: {
-    src: 'app/styles/*.scss',
+    src: 'app/styles',
     dest: 'public/assets/css'
   },
   images: {
-    src: 'app/images/**/*',
+    src: 'app/images',
     dest: 'public/assets/images'
   }
 };
@@ -52,10 +52,10 @@ gulp.task('views', function () {
     return {};
   }
 
-  return gulp.src(paths.views.src)
+  return gulp.src(paths.views.src + '/*.ejs')
     .pipe(data(function (file) {
       var data = getData(file.path.substr(0, file.path.indexOf(file.extname)) + '.json'),
-          global = getData('app/views/global.json');
+          global = getData(paths.views.src + '/global.json');
       return Object.assign({}, global, data);
     }))
     .pipe(ejs({ production: !isDevelopment }, {}, { ext: '.html' }))
@@ -65,9 +65,9 @@ gulp.task('views', function () {
 });
 
 gulp.task('csscomb', function() {
-  return gulp.src(paths.styles.src)
+  return gulp.src(paths.styles.src + '/*.scss')
     .pipe(cssComb())
-    .pipe(gulp.dest('app/styles'));
+    .pipe(gulp.dest(paths.styles.src));
 });
 
 gulp.task('styles', function () {
@@ -79,7 +79,7 @@ gulp.task('styles', function () {
     .pipe(postCss, [ cssNano() ])
     .pipe(rename, { suffix: '.min' });
 
-  return gulp.src(paths.styles.src)
+  return gulp.src(paths.styles.src + '/*.scss')
     .pipe(gulpIf(isDevelopment, sourceMaps.init()))
     .pipe(sass().on('error', sass.logError))
     .pipe(header(banner, { pkg: pkg }))
@@ -93,7 +93,7 @@ gulp.task('styles', function () {
 });
 
 gulp.task('images', function() {
-  return gulp.src(paths.images.src)
+  return gulp.src(paths.images.src + '/**/*')
     .pipe(gulpIf(!isDevelopment, imageMin()))
     .pipe(gulp.dest(paths.images.dest))
     .pipe(browserSync.stream());
@@ -106,9 +106,9 @@ gulp.task('watch', function() {
     }
   });
 
-  gulp.watch(['app/views/**/*.ejs', 'app/views/*.json'], gulp.series('views'));
-  gulp.watch('app/styles/**/*.scss', gulp.series('styles'));
-  gulp.watch('app/images/**/*', gulp.series('images'));
+  gulp.watch([paths.views.src + '/**/*.ejs', paths.views.src + '/*.json'], gulp.series('views'));
+  gulp.watch(paths.styles.src + '/**/*.scss', gulp.series('styles'));
+  gulp.watch(paths.images.src + '/**/*', gulp.series('images'));
 });
 
 gulp.task('clean', function() {
