@@ -1,6 +1,6 @@
 {
   "name": "gulped",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Gulp-based project template",
   "scripts": {
     "start": "gulp",

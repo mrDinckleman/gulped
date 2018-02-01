@@ -38,24 +38,16 @@ var paths = {
 
 var banner = '/*!\n' +
   ' * <%= pkg.name %> v<%= pkg.version %><% if (pkg.homepage) { %> (<%= pkg.homepage %>)<% } %>\n' +
-  ' * <%= pkg.author %> <%= new Date().getFullYear() %>\n' +
+  ' * <%= new Date().getFullYear() %> <%= pkg.author %>\n' +
   ' */\n',
   pkg = require('./package.json');
 
 gulp.task('views', function () {
-  function getData(file) {
-    try {
-      return JSON.parse(fs.readFileSync(file));
-    } catch (err) {
-      console.warn('Invalid JSON in ' + file);
-    }
-    return {};
-  }
+  var global = getJSON(paths.views.src + '/global.json');
 
   return gulp.src(paths.views.src + '/*.ejs')
     .pipe(data(function (file) {
-      var data = getData(file.path.substr(0, file.path.indexOf(file.extname)) + '.json'),
-          global = getData(paths.views.src + '/global.json');
+      var data = getJSON(file.path.substr(0, file.path.indexOf(file.extname)) + '.json');
       return Object.assign({}, global, data);
     }))
     .pipe(ejs({ production: !isDevelopment }, {}, { ext: '.html' }))
@@ -118,3 +110,12 @@ gulp.task('clean', function() {
 gulp.task('default', gulp.series('views', 'styles', 'images', 'watch'));
 
 gulp.task('build', gulp.series('clean', 'views', 'csscomb', 'styles', 'images'));
+
+function getJSON(file) {
+  try {
+    return JSON.parse(fs.readFileSync(file));
+  } catch (err) {
+    console.warn('Invalid JSON in ' + file);
+  }
+  return {};
+}
