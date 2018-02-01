@@ -9,6 +9,8 @@ var gulp = require('gulp'),
   autoPrefixer = require('autoprefixer'),
   atImport = require('postcss-import'),
   cssNano = require('cssnano'),
+  concat = require('gulp-concat'),
+  uglify = require('gulp-uglify'),
   gulpIf = require('gulp-if'),
   lazyPipe = require('lazypipe'),
   sourceMaps = require('gulp-sourcemaps'),
@@ -29,6 +31,10 @@ var paths = {
   styles: {
     src: 'app/styles',
     dest: 'public/assets/css'
+  },
+  scripts: {
+    src: 'app/scripts',
+    dest: 'public/assets/js'
   },
   images: {
     src: 'app/images',
@@ -87,6 +93,30 @@ gulp.task('styles', function () {
     .pipe(browserSync.stream());
 });
 
+gulp.task('scripts', function () {
+  // because of issue https://github.com/OverZealous/lazypipe/issues/14
+  // lazypipe will not finish task when placed on the end of pipe queue
+  // so gulp.dest was moved to beginning for proper stop
+  var jsMinify = lazyPipe()
+    .pipe(gulp.dest, paths.scripts.dest) // saves non-minified version
+    .pipe(uglify, { output: { comments: /^!/ } })
+    .pipe(rename, { suffix: '.min' });
+
+  var imports = getJSON(paths.scripts.src + '/imports.json').src || [];
+  imports.push('app.js');
+
+  return gulp.src(imports, { cwd: paths.scripts.src })
+    .pipe(gulpIf(isDevelopment, sourceMaps.init()))
+    .pipe(concat('app.js'))
+    .pipe(header(banner, { pkg: pkg }))
+    .pipe(gulpIf(isDevelopment, sourceMaps.write('./')))
+    .pipe(gulpIf(!isDevelopment, jsMinify()))
+    // saves non-minified files in the case of development
+    // and minified files in the case of production
+    .pipe(gulp.dest(paths.scripts.dest))
+    .pipe(browserSync.stream());
+});
+
 gulp.task('images', function() {
   return gulp.src(paths.images.src + '/**/*')
     .pipe(gulpIf(!isDevelopment, imageMin()))
@@ -103,6 +133,7 @@ gulp.task('watch', function() {
 
   gulp.watch([paths.views.src + '/**/*.ejs', paths.views.src + '/*.json'], gulp.series('views'));
   gulp.watch(paths.styles.src + '/**/*.scss', gulp.series('styles'));
+  gulp.watch([paths.scripts.src + '/**/*.js', paths.scripts.src + '/imports.json'], gulp.series('scripts'));
   gulp.watch(paths.images.src + '/**/*', gulp.series('images'));
 });
 
@@ -110,9 +141,9 @@ gulp.task('clean', function() {
   return del(['public']);
 });
 
-gulp.task('default', gulp.series('views', 'styles', 'images', 'watch'));
+gulp.task('default', gulp.series('views', 'styles', 'scripts', 'images', 'watch'));
 
-gulp.task('build', gulp.series('clean', 'views', 'csscomb', 'styles', 'images'));
+gulp.task('build', gulp.series('clean', 'views', 'csscomb', 'styles', 'scripts', 'images'));
 
 function getJSON(file) {
   try {
