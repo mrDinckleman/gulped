@@ -50,7 +50,10 @@ gulp.task('views', function () {
       var data = getJSON(file.path.substr(0, file.path.indexOf(file.extname)) + '.json');
       return Object.assign({}, global, data);
     }))
-    .pipe(ejs({ production: !isDevelopment }, {}, { ext: '.html' }))
+    .pipe(ejs({ production: !isDevelopment }, {}, { ext: '.html' })).on('error', function(error) {
+      console.error(error.message);
+      this.emit('end');
+    })
     .pipe(htmlComb())
     .pipe(gulp.dest(paths.views.dest))
     .pipe(browserSync.stream());
