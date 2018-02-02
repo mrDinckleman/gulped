@@ -39,6 +39,14 @@ var paths = {
   images: {
     src: 'app/images',
     dest: 'public/assets/images'
+  },
+  fonts: {
+    src: 'app/fonts',
+    dest: 'public/assets/fonts'
+  },
+  static: {
+    src: 'app/static',
+    dest: 'public'
   }
 };
 
@@ -124,6 +132,18 @@ gulp.task('images', function() {
     .pipe(browserSync.stream());
 });
 
+gulp.task('fonts', function() {
+  return gulp.src(paths.fonts.src + '/**/*')
+    .pipe(gulp.dest(paths.fonts.dest))
+    .pipe(browserSync.stream());
+});
+
+gulp.task('static', function() {
+  return gulp.src(paths.static.src + '/**/*')
+    .pipe(gulp.dest(paths.static.dest))
+    .pipe(browserSync.stream());
+});
+
 gulp.task('watch', function() {
   browserSync.init({
     server: {
@@ -135,15 +155,17 @@ gulp.task('watch', function() {
   gulp.watch(paths.styles.src + '/**/*.scss', gulp.series('styles'));
   gulp.watch([paths.scripts.src + '/**/*.js', paths.scripts.src + '/imports.json'], gulp.series('scripts'));
   gulp.watch(paths.images.src + '/**/*', gulp.series('images'));
+  gulp.watch(paths.fonts.src + '/**/*', gulp.series('fonts'));
+  gulp.watch(paths.static.src + '/**/*', gulp.series('static'));
 });
 
 gulp.task('clean', function() {
   return del(['public']);
 });
 
-gulp.task('default', gulp.series('views', 'styles', 'scripts', 'images', 'watch'));
+gulp.task('default', gulp.series('views', 'styles', 'scripts', 'images', 'fonts', 'static', 'watch'));
 
-gulp.task('build', gulp.series('clean', 'views', 'csscomb', 'styles', 'scripts', 'images'));
+gulp.task('build', gulp.series('clean', 'views', 'csscomb', 'styles', 'scripts', 'images', 'fonts', 'static'));
 
 function getJSON(file) {
   try {
