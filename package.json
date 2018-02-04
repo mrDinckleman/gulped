@@ -1,6 +1,6 @@
 {
   "name": "gulped",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Gulp-based project template",
   "scripts": {
     "start": "gulp",
@@ -30,6 +30,7 @@
     "gulp-imagemin": "^4.1.0",
     "gulp-postcss": "^7.0.1",
     "gulp-rename": "^1.2.2",
+    "gulp-ruby-sass": "^3.0.0",
     "gulp-sass": "^3.1.0",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-uglify": "^3.0.0",
