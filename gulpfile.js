@@ -71,6 +71,8 @@ gulp.task('views', function () {
       return Object.assign({}, global, data);
     }))
     .pipe(ejs({ production: !isDevelopment }, {}, { ext: '.html' })).on('error', function(error) {
+      // Due to issue https://github.com/rogeriopvl/gulp-ejs/issues/86
+      // was added custom error handler
       console.error(error.message);
       this.emit('end');
     })
@@ -143,13 +145,13 @@ gulp.task('images', function() {
 });
 
 gulp.task('fonts', function() {
-  return gulp.src(paths.fonts.src + '/**/*')
+  return gulp.src(paths.fonts.src + '/**/*', { read: false })
     .pipe(gulp.dest(paths.fonts.dest))
     .pipe(browserSync.stream());
 });
 
 gulp.task('static', function() {
-  return gulp.src(paths.static.src + '/**/*')
+  return gulp.src(paths.static.src + '/**/*', { read: false })
     .pipe(gulp.dest(paths.static.dest))
     .pipe(browserSync.stream());
 });

@@ -1,7 +1,7 @@
 {
   "name": "gulped",
-  "version": "0.6.1",
-  "description": "Gulp-based project template",
+  "version": "0.6.2",
+  "description": "Project template based on SASS and EJS builded with Gulp",
   "scripts": {
     "start": "gulp",
     "build": "set NODE_ENV=production && gulp build",
@@ -11,9 +11,11 @@
     "gulp",
     "template"
   ],
-  "homepage": "https://github.com/mrDinckleman",
+  "homepage": "https://github.com/mrDinckleman/gulped",
   "author": "Sergey Kovalchuk <admin@vitam.in.ua>",
-  "license": "ISC",
+  "repository": "github:mrDinckleman/gulped",
+  "bugs": "https://github.com/mrDinckleman/gulped/issues",
+  "license": "MIT",
   "devDependencies": {
     "autoprefixer": "^7.2.5",
     "browser-sync": "^2.23.6",
@@ -37,6 +39,5 @@
     "lazypipe": "^1.0.1",
     "postcss-import": "^11.0.0",
     "sanitize.css": "^5.0.0"
-  },
-  "private": true
+  }
 }
