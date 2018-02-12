@@ -24,6 +24,7 @@ var gulp = require('gulp'),
   browserSync = require('browser-sync').create(),
   rename = require('gulp-rename'),
   del = require('del'),
+  zip = require('gulp-zip'),
   path = require('path'),
   fs = require('fs');
 
@@ -175,9 +176,15 @@ gulp.task('clean', function() {
   return del(['public']);
 });
 
+gulp.task('zip', function() {
+  return gulp.src('public/**/*')
+    .pipe(zip(pkg.name + '-' + pkg.version + '+' + (new Date().toISOString().replace(/[T\-:]|\..+/g, '')) + '.zip'))
+    .pipe(gulp.dest('release'));
+});
+
 gulp.task('default', gulp.series('views', 'styles', 'scripts', 'images', 'fonts', 'static', 'watch'));
 
-gulp.task('build', gulp.series('clean', 'views', 'csscomb', 'styles', 'scripts', 'images', 'fonts', 'static'));
+gulp.task('build', gulp.series('clean', 'views', 'csscomb', 'styles', 'scripts', 'images', 'fonts', 'static', 'zip'));
 
 function getJSON(file) {
   try {

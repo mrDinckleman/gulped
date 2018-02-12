@@ -43,6 +43,7 @@ Make HTML markup easily with this project template.
 * [gulp-rename](https://github.com/hparra/gulp-rename) for renaming minifyed files
 * [browser-sync](https://github.com/BrowserSync/browser-sync) for real-time browser testing
 * [del](https://github.com/sindresorhus/del) for clearing build directory
+* [gulp-zip](https://github.com/sindresorhus/gulp-zip) for production files packing
 
 ## File structure
 
@@ -54,12 +55,13 @@ Make HTML markup easily with this project template.
     │   ├── static        # Static files
     │   ├── styles        # SCSS files
     │   └── views         # EJS files
-    └── public            # Compiled files
-        └── assets
-            ├── css       # CSS files
-            ├── images    # Images
-            ├── fonts     # Fonts
-            └── js        # JS files
+    ├── public            # Compiled files
+    │   └── assets
+    │       ├── css       # CSS files
+    │       ├── images    # Images
+    │       ├── fonts     # Fonts
+    │       └── js        # JS files
+    └── release           # ZIP-archives with compiled files
  
 ## Usage
 
