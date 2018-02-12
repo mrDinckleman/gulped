@@ -1,6 +1,6 @@
 {
   "name": "gulped",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Project template based on SASS and EJS builded with Gulp",
   "scripts": {
     "start": "gulp",

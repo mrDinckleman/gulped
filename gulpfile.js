@@ -182,9 +182,9 @@ gulp.task('zip', function() {
     .pipe(gulp.dest('release'));
 });
 
-gulp.task('default', gulp.series('views', 'styles', 'scripts', 'images', 'fonts', 'static', 'watch'));
+gulp.task('default', gulp.series(gulp.parallel('views', 'styles', 'scripts', 'images', 'fonts', 'static'), 'watch'));
 
-gulp.task('build', gulp.series('clean', 'views', 'csscomb', 'styles', 'scripts', 'images', 'fonts', 'static', 'zip'));
+gulp.task('build', gulp.series('clean', 'csscomb', gulp.parallel('views', 'styles', 'scripts', 'images', 'fonts', 'static'), 'zip'));
 
 function getJSON(file) {
   try {
