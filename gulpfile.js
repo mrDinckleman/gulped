@@ -146,13 +146,13 @@ gulp.task('images', function() {
 });
 
 gulp.task('fonts', function() {
-  return gulp.src(paths.fonts.src + '/**/*', { read: false })
+  return gulp.src(paths.fonts.src + '/**/*')
     .pipe(gulp.dest(paths.fonts.dest))
     .pipe(browserSync.stream());
 });
 
 gulp.task('static', function() {
-  return gulp.src(paths.static.src + '/**/*', { read: false })
+  return gulp.src(paths.static.src + '/**/*')
     .pipe(gulp.dest(paths.static.dest))
     .pipe(browserSync.stream());
 });
