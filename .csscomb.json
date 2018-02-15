@@ -93,6 +93,7 @@
       "direction",
       "font",
       "font-family",
+      "src",
       "font-feature-settings",
       "font-size",
       "font-kerning",
