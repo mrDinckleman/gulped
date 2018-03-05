@@ -18,7 +18,7 @@ var gulp = require('gulp'),
   concat = require('gulp-concat'),
   uglify = require('gulp-uglify'),
   gulpIf = require('gulp-if'),
-  lazyPipe = require('lazypipe'),
+  multipipe = require('multipipe'),
   sourceMaps = require('gulp-sourcemaps'),
   imageMin = require('gulp-imagemin'),
   browserSync = require('browser-sync').create(),
@@ -89,13 +89,11 @@ gulp.task('csscomb', function() {
 });
 
 gulp.task('styles', function () {
-  // because of issue https://github.com/OverZealous/lazypipe/issues/14
-  // lazypipe will not finish task when placed on the end of pipe queue
-  // so gulp.dest was moved to beginning for proper stop
-  var cssMinify = lazyPipe()
-    .pipe(gulp.dest, paths.styles.dest) // saves non-minified version
-    .pipe(postCss, [ cssNano() ])
-    .pipe(rename, { suffix: '.min' });
+  var cssMinify = multipipe(
+    postCss([ cssNano() ]),
+    rename({ suffix: '.min' }),
+    gulp.dest(paths.styles.dest)
+  );
 
   /* TODO: uncomment gulp-sass code after new release
   return gulp.src(paths.styles.src + '/*.scss')
@@ -107,21 +105,17 @@ gulp.task('styles', function () {
     .pipe(header(banner, { pkg: pkg }))
     .pipe(postCss([ autoPrefixer(), atImport() ]))
     .pipe(gulpIf(isDevelopment, sourceMaps.write('./')))
-    .pipe(gulpIf(!isDevelopment, cssMinify()))
-    // saves non-minified files in the case of development
-    // and minified files in the case of production
     .pipe(gulp.dest(paths.styles.dest))
+    .pipe(gulpIf(!isDevelopment, cssMinify))
     .pipe(browserSync.stream());
 });
 
 gulp.task('scripts', function () {
-  // because of issue https://github.com/OverZealous/lazypipe/issues/14
-  // lazypipe will not finish task when placed on the end of pipe queue
-  // so gulp.dest was moved to beginning for proper stop
-  var jsMinify = lazyPipe()
-    .pipe(gulp.dest, paths.scripts.dest) // saves non-minified version
-    .pipe(uglify, { output: { comments: /^!/ } })
-    .pipe(rename, { suffix: '.min' });
+  var jsMinify = multipipe(
+    uglify({ output: { comments: /^!/ } }),
+    rename({ suffix: '.min' }),
+    gulp.dest(paths.scripts.dest)
+  );
 
   var imports = getJSON(paths.scripts.src + '/imports.json').src || [];
   imports.push('app.js');
@@ -131,10 +125,8 @@ gulp.task('scripts', function () {
     .pipe(concat('app.js'))
     .pipe(header(banner, { pkg: pkg }))
     .pipe(gulpIf(isDevelopment, sourceMaps.write('./')))
-    .pipe(gulpIf(!isDevelopment, jsMinify()))
-    // saves non-minified files in the case of development
-    // and minified files in the case of production
     .pipe(gulp.dest(paths.scripts.dest))
+    .pipe(gulpIf(!isDevelopment, jsMinify))
     .pipe(browserSync.stream());
 });
 

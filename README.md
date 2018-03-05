@@ -39,7 +39,7 @@ Make HTML markup easily with this project template.
 * [gulp-sourcemaps](https://github.com/gulp-sourcemaps/gulp-sourcemaps) for source map support
 * [gulp-header](https://github.com/tracker1/gulp-header) for adding banner in styles and scripts
 * [gulp-if](https://github.com/robrich/gulp-if) for conditionally running a tasks
-* [lazypipe](https://github.com/OverZealous/lazypipe) for grouping conditional tasks
+* [multipipe](https://github.com/juliangruber/multipipe) for grouping conditional tasks
 * [gulp-rename](https://github.com/hparra/gulp-rename) for renaming minifyed files
 * [browser-sync](https://github.com/BrowserSync/browser-sync) for real-time browser testing
 * [del](https://github.com/sindresorhus/del) for clearing build directory
