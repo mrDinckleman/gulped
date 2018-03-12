@@ -3,13 +3,7 @@ var gulp = require('gulp'),
   data = require('gulp-data'),
   htmlComb = require('gulp-htmlcomb'),
   cssComb = require('gulp-csscomb'),
-  // gulp-sass works incorrect with sourcemaps as described in issue
-  // https://github.com/sass/libsass/issues/2312
-  // Until a new version of gulp-sass with the corrected version of LibSass is
-  // released, the sass task will use a slower but stable gulp-ruby-sass
-  // TODO: replace gulp-ruby-sass with gulp-sass after new release
-  // sass = require('gulp-sass'),
-  sass = require('gulp-ruby-sass'),
+  sass = require('gulp-sass'),
   header = require('gulp-header'),
   postCss = require('gulp-postcss'),
   autoPrefixer = require('autoprefixer'),
@@ -95,13 +89,9 @@ gulp.task('styles', function () {
     gulp.dest(paths.styles.dest)
   );
 
-  /* TODO: uncomment gulp-sass code after new release
   return gulp.src(paths.styles.src + '/*.scss')
     .pipe(gulpIf(isDevelopment, sourceMaps.init()))
     .pipe(sass().on('error', sass.logError))
-  /*/
-  return sass(paths.styles.src + '/*.scss', { sourcemap: true }).on('error', sass.logError)
-  //*/
     .pipe(header(banner, { pkg: pkg }))
     .pipe(postCss([ autoPrefixer(), atImport() ]))
     .pipe(gulpIf(isDevelopment, sourceMaps.write('./')))

@@ -15,7 +15,6 @@ Make HTML markup easily with this project template.
 **Styles**
 
 * [gulp-sass](https://github.com/dlmanning/gulp-sass) for styles
-  + Notice: due to [LibSass issue](https://github.com/sass/libsass/issues/2312), gulp-sass temporary replaced with slower [gulp-ruby-sass](https://github.com/sindresorhus/gulp-ruby-sass). So you need to install [Ruby](https://rubyinstaller.org/) and run `gem install sass`.
 * [gulp-postcss](https://github.com/postcss/gulp-postcss) for transforming styles with plugins:
   + [postcss-import](https://github.com/postcss/postcss-import) for inline third-party CSS content
   + [autoprefixer](https://github.com/postcss/autoprefixer) for adding vendor prefixes
