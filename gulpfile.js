@@ -13,6 +13,7 @@ var gulp = require('gulp'),
   uglify = require('gulp-uglify'),
   gulpIf = require('gulp-if'),
   multipipe = require('multipipe'),
+  through2 = require('through2').obj,
   sourceMaps = require('gulp-sourcemaps'),
   imageMin = require('gulp-imagemin'),
   browserSync = require('browser-sync').create(),
@@ -60,7 +61,7 @@ var banner = '/*!\n' +
 gulp.task('views', function () {
   var global = getJSON(paths.views.src + '/global.json');
 
-  return gulp.src(paths.views.src + '/*.ejs')
+  return gulp.src(paths.views.src + '/*.ejs', { since: gulp.lastRun('views') })
     .pipe(data(function (file) {
       var data = getJSON(file.path.substr(0, file.path.indexOf(file.extname)) + '.json');
       return Object.assign({}, global, data);
@@ -74,6 +75,39 @@ gulp.task('views', function () {
     .pipe(htmlComb())
     .pipe(gulp.dest(paths.views.dest))
     .pipe(browserSync.stream());
+});
+
+gulp.task('data', function() {
+  return gulp.src(paths.views.src + '/*.json', { since: gulp.lastRun('views') })
+    .pipe(through2(function(file, ext, cb) {
+      var path,
+          now = new Date();
+      if (file.basename === 'global.json') {
+        path = file.path.slice(0, -file.basename.length);
+        fs.readdir(path, function(err, files) {
+          if (err) {
+            console.error('readdir:', err.message);
+            return;
+          }
+          files.forEach(function(file) {
+            if (file.indexOf('.ejs') === -1) return;
+            fs.utimes(path + file, now, now, function(err2) {
+              if (err2) {
+                console.error('utimes:', err2.message);
+              }
+            });
+          });
+        });
+      } else {
+        path = file.path.slice(0, -file.extname.length) + '.ejs';
+        fs.utimes(path, now, now, function(err) {
+          if (err) {
+            console.error('utimes:', err.message);
+          }
+        });
+      }
+      cb();
+    }));
 });
 
 gulp.task('csscomb', function() {
@@ -146,7 +180,8 @@ gulp.task('watch', function() {
     }
   });
 
-  gulp.watch([paths.views.src + '/**/*.ejs', paths.views.src + '/*.json'], gulp.series('views'));
+  gulp.watch(paths.views.src + '/**/*.ejs', gulp.series('views'));
+  gulp.watch(paths.views.src + '/*.json', gulp.series('data'));
   gulp.watch(paths.styles.src + '/**/*.scss', gulp.series('styles'));
   gulp.watch([paths.scripts.src + '/**/*.js', paths.scripts.src + '/imports.json'], gulp.series('scripts'));
   gulp.watch(paths.images.src + '/**/*', gulp.series('images'));
