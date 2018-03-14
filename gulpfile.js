@@ -13,6 +13,7 @@ var gulp = require('gulp'),
   uglify = require('gulp-uglify'),
   gulpIf = require('gulp-if'),
   multipipe = require('multipipe'),
+  progeny = require('gulp-progeny'),
   through2 = require('through2').obj,
   sourceMaps = require('gulp-sourcemaps'),
   imageMin = require('gulp-imagemin'),
@@ -61,7 +62,17 @@ var banner = '/*!\n' +
 gulp.task('views', function () {
   var global = getJSON(paths.views.src + '/global.json');
 
-  return gulp.src(paths.views.src + '/*.ejs', { since: gulp.lastRun('views') })
+  return gulp.src(paths.views.src + '/**/*.ejs', { since: gulp.lastRun('views') })
+    .pipe(progeny({
+      regexp: /<%-\s*include\(\s*['"]?([^'"]+)['"]?/,
+      extensionsList: ['ejs']
+    }))
+    .pipe(through2(function(file, ext, cb) {
+      if (file.basename.indexOf('_') !== 0) {
+        this.push(file);
+      }
+      cb();
+    }))
     .pipe(data(function (file) {
       var data = getJSON(file.path.substr(0, file.path.indexOf(file.extname)) + '.json');
       return Object.assign({}, global, data);

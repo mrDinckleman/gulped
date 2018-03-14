@@ -40,6 +40,7 @@ Make HTML markup easily with this project template.
 * [gulp-if](https://github.com/robrich/gulp-if) for conditionally running a tasks
 * [multipipe](https://github.com/juliangruber/multipipe) for grouping conditional tasks
 * [through2](https://github.com/rvagg/through2) for custom pipes
+* [gulp-progeny](https://github.com/HerringtonDarkholme/gulp-progeny) for incremental build
 * [gulp-rename](https://github.com/hparra/gulp-rename) for renaming minifyed files
 * [browser-sync](https://github.com/BrowserSync/browser-sync) for real-time browser testing
 * [del](https://github.com/sindresorhus/del) for clearing build directory
