@@ -1,4 +1,4 @@
-# Gulped
+# Gulped [![devDependency Status][daviddm-image]][daviddm-url]
 
 > Project template based on [SASS](http://sass-lang.com/) and [EJS](http://ejs.co/) builded with [Gulp](https://gulpjs.com/)
 
@@ -109,3 +109,6 @@ To add vendor scripts, specify them in `app/scripts/imports.json` with paths rel
 **Static**
 
 Files, placed in `app/static` directory will be copied to the root of `public` directory. Use it for favicon, robots.txt or other similar files.
+
+[daviddm-image]: https://david-dm.org/mrDinckleman/gulped/dev-status.svg
+[daviddm-url]: https://david-dm.org/mrDinckleman/gulped?type=dev

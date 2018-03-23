@@ -1,10 +1,10 @@
 {
   "name": "gulped",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "Project template based on SASS and EJS builded with Gulp",
   "scripts": {
     "start": "gulp",
-    "build": "set NODE_ENV=production && gulp build",
+    "build": "set NODE_ENV=production&& gulp build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
