@@ -25,7 +25,7 @@ Make HTML markup easily with this project template.
 
 **Scripts**
 
-* [gulp-concat](https://github.com/gulp-community/gulp-concat) for scripts concatenation
+* [browserify](https://github.com/browserify/browserify) for scripts bundling (using [vinyl-source-stream](https://github.com/hughsk/vinyl-source-stream) and [vinyl-buffer](https://github.com/hughsk/vinyl-buffer))
 * [gulp-uglify](https://github.com/terinjokes/gulp-uglify) for minifying javascript
 
 **Images**
@@ -98,13 +98,9 @@ To add new template like `page.ejs`, place it to the `app/views` directory. You 
 
 **Scripts**
 
-To add vendor scripts, specify them in `app/scripts/imports.json` with paths relative to this directory, like:
+To add vendor scripts, just require it in `app/scripts/app.js` like:
 
-    {
-      "src": [
-        "../../node_modules/vendor-plugin/index.js"
-      ]
-    }
+    var $ = require('jquery');
 
 **Static**
 

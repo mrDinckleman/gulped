@@ -9,7 +9,9 @@ var gulp = require('gulp'),
   autoPrefixer = require('autoprefixer'),
   atImport = require('postcss-import'),
   cssNano = require('cssnano'),
-  concat = require('gulp-concat'),
+  browserify = require('browserify'),
+  source = require('vinyl-source-stream'),
+  buffer = require('vinyl-buffer'),
   uglify = require('gulp-uglify'),
   gulpIf = require('gulp-if'),
   multipipe = require('multipipe'),
@@ -21,7 +23,6 @@ var gulp = require('gulp'),
   rename = require('gulp-rename'),
   del = require('del'),
   zip = require('gulp-zip'),
-  path = require('path'),
   fs = require('fs');
 
 var isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
@@ -152,12 +153,12 @@ gulp.task('scripts', function () {
     gulp.dest(paths.scripts.dest)
   );
 
-  var imports = getJSON(paths.scripts.src + '/imports.json').src || [];
-  imports.push('app.js');
-
-  return gulp.src(imports, { cwd: paths.scripts.src })
-    .pipe(gulpIf(isDevelopment, sourceMaps.init()))
-    .pipe(concat('app.js'))
+  return browserify({
+      entries: paths.scripts.src + '/app.js'
+    }).bundle()
+    .pipe(source('app.js'))
+    .pipe(buffer())
+    .pipe(gulpIf(isDevelopment, sourceMaps.init({ loadMaps: true })))
     .pipe(header(banner, { pkg: pkg }))
     .pipe(gulpIf(isDevelopment, sourceMaps.write('./')))
     .pipe(gulp.dest(paths.scripts.dest))
@@ -194,7 +195,7 @@ gulp.task('watch', function() {
   gulp.watch(paths.views.src + '/**/*.ejs', gulp.series('views'));
   gulp.watch(paths.views.src + '/*.json', gulp.series('data'));
   gulp.watch(paths.styles.src + '/**/*.scss', gulp.series('styles'));
-  gulp.watch([paths.scripts.src + '/**/*.js', paths.scripts.src + '/imports.json'], gulp.series('scripts'));
+  gulp.watch(paths.scripts.src + '/**/*.js', gulp.series('scripts'));
   gulp.watch(paths.images.src + '/**/*', gulp.series('images'));
   gulp.watch(paths.fonts.src + '/**/*', gulp.series('fonts'));
   gulp.watch(paths.static.src + '/**/*', gulp.series('static'));
