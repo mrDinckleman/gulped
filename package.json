@@ -1,6 +1,6 @@
 {
   "name": "gulped",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "description": "Project template based on SASS and EJS builded with Gulp",
   "scripts": {
     "start": "gulp",
@@ -17,8 +17,8 @@
   "bugs": "https://github.com/mrDinckleman/gulped/issues",
   "license": "MIT",
   "devDependencies": {
-    "autoprefixer": "^8.3.0",
-    "browser-sync": "^2.23.7",
+    "autoprefixer": "^8.4.1",
+    "browser-sync": "^2.24.4",
     "browserify": "^16.2.0",
     "cssnano": "^3.10.0",
     "del": "^3.0.0",
