@@ -1,6 +1,6 @@
 {
   "name": "gulped",
-  "version": "0.8.10",
+  "version": "0.8.11",
   "description": "Project template based on SASS and EJS builded with Gulp",
   "scripts": {
     "start": "gulp",
@@ -30,6 +30,7 @@
     "gulp-htmlcomb": "^0.2.0",
     "gulp-if": "^2.0.2",
     "gulp-imagemin": "^4.1.0",
+    "gulp-notify": "^3.2.0",
     "gulp-postcss": "^7.0.1",
     "gulp-progeny": "^0.4.1",
     "gulp-rename": "^1.2.2",

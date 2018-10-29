@@ -15,6 +15,7 @@ var gulp = require('gulp'),
   uglify = require('gulp-uglify'),
   gulpIf = require('gulp-if'),
   multipipe = require('multipipe'),
+  notify = require('gulp-notify'),
   progeny = require('gulp-progeny'),
   through2 = require('through2').obj,
   sourceMaps = require('gulp-sourcemaps'),
@@ -82,6 +83,12 @@ gulp.task('views', function () {
       // Due to issue https://github.com/rogeriopvl/gulp-ejs/issues/86
       // was added custom error handler
       console.error(error.message);
+      notify.onError(function(err) {
+        return {
+          title: 'Styles',
+          message: err.message
+        }
+      });
       this.emit('end');
     })
     .pipe(htmlComb())
@@ -137,7 +144,12 @@ gulp.task('styles', function () {
 
   return gulp.src(paths.styles.src + '/*.scss')
     .pipe(gulpIf(isDevelopment, sourceMaps.init()))
-    .pipe(sass().on('error', sass.logError))
+    .pipe(sass()).on('error', notify.onError(function(err) {
+      return {
+        title: 'Styles',
+        message: err.message
+      }
+    }))
     .pipe(header(banner, { pkg: pkg }))
     .pipe(postCss([ autoPrefixer(), atImport() ]))
     .pipe(gulpIf(isDevelopment, sourceMaps.write('./')))
@@ -156,6 +168,12 @@ gulp.task('scripts', function () {
   return browserify({
       entries: paths.scripts.src + '/app.js'
     }).bundle()
+    .on('error', notify.onError(function(err) {
+      return {
+        title: 'Scripts',
+        message: err.message
+      }
+    }))
     .pipe(source('app.js'))
     .pipe(buffer())
     .pipe(gulpIf(isDevelopment, sourceMaps.init({ loadMaps: true })))
