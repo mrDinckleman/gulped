@@ -1,3 +1,4 @@
+'use strict';
 var gulp = require('gulp'),
   ejs = require('gulp-ejs'),
   data = require('gulp-data'),
@@ -9,9 +10,7 @@ var gulp = require('gulp'),
   autoPrefixer = require('autoprefixer'),
   atImport = require('postcss-import'),
   cssNano = require('cssnano'),
-  browserify = require('browserify'),
-  source = require('vinyl-source-stream'),
-  buffer = require('vinyl-buffer'),
+  bro = require('gulp-bro'),
   uglify = require('gulp-uglify'),
   gulpIf = require('gulp-if'),
   multipipe = require('multipipe'),
@@ -24,7 +23,8 @@ var gulp = require('gulp'),
   rename = require('gulp-rename'),
   del = require('del'),
   zip = require('gulp-zip'),
-  fs = require('fs');
+  fs = require('fs'),
+  path = require('path');
 
 var isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 
@@ -65,7 +65,7 @@ gulp.task('views', function () {
   var global = getJSON(paths.views.src + '/global.json');
 
   return gulp.src(paths.views.src + '/**/*.ejs', { since: gulp.lastRun('views') })
-    .pipe(progeny({
+    .pipe(progeny({ // TODO: there is a memory leak, need to investigate
       regexp: /<%-\s*include\(\s*['"]?([^'"]+)['"]?/,
       extensionsList: ['ejs']
     }))
@@ -83,7 +83,7 @@ gulp.task('views', function () {
       // Due to issue https://github.com/rogeriopvl/gulp-ejs/issues/86
       // was added custom error handler
       console.error(error.message);
-      notify.onError(function(err) {
+      notify.onError(function(err) { // TODO: did not working, need to investigate
         return {
           title: 'Styles',
           message: err.message
@@ -129,7 +129,7 @@ gulp.task('data', function() {
     }));
 });
 
-gulp.task('csscomb', function() {
+gulp.task('csscomb', function() { // TODO: there is a problem with moving media queries, need to investigate
   return gulp.src(paths.styles.src + '/*.scss')
     .pipe(cssComb())
     .pipe(gulp.dest(paths.styles.src));
@@ -144,7 +144,9 @@ gulp.task('styles', function () {
 
   return gulp.src(paths.styles.src + '/*.scss')
     .pipe(gulpIf(isDevelopment, sourceMaps.init()))
-    .pipe(sass()).on('error', notify.onError(function(err) {
+    .pipe(sass({
+      includePaths: [ path.join(__dirname, '/node_modules/') ]
+    })).on('error', notify.onError(function(err) {
       return {
         title: 'Styles',
         message: err.message
@@ -165,17 +167,17 @@ gulp.task('scripts', function () {
     gulp.dest(paths.scripts.dest)
   );
 
-  return browserify({
-      entries: paths.scripts.src + '/app.js'
-    }).bundle()
+  return gulp.src(paths.scripts.src + '/app.js')
+    .pipe(bro({
+      debug: true,
+      error: 'emit'
+    }))
     .on('error', notify.onError(function(err) {
       return {
         title: 'Scripts',
         message: err.message
       }
     }))
-    .pipe(source('app.js'))
-    .pipe(buffer())
     .pipe(gulpIf(isDevelopment, sourceMaps.init({ loadMaps: true })))
     .pipe(header(banner, { pkg: pkg }))
     .pipe(gulpIf(isDevelopment, sourceMaps.write('./')))
@@ -185,20 +187,20 @@ gulp.task('scripts', function () {
 });
 
 gulp.task('images', function() {
-  return gulp.src(paths.images.src + '/**/*')
+  return gulp.src(paths.images.src + '/**/*', {since: gulp.lastRun('images')})
     .pipe(gulpIf(!isDevelopment, imageMin()))
     .pipe(gulp.dest(paths.images.dest))
     .pipe(browserSync.stream());
 });
 
 gulp.task('fonts', function() {
-  return gulp.src(paths.fonts.src + '/**/*')
+  return gulp.src(paths.fonts.src + '/**/*', {since: gulp.lastRun('fonts')})
     .pipe(gulp.dest(paths.fonts.dest))
     .pipe(browserSync.stream());
 });
 
 gulp.task('static', function() {
-  return gulp.src(paths.static.src + '/**/*')
+  return gulp.src(paths.static.src + '/**/*', {since: gulp.lastRun('static')})
     .pipe(gulp.dest(paths.static.dest))
     .pipe(browserSync.stream());
 });

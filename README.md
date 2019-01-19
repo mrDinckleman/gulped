@@ -25,7 +25,7 @@ Make HTML markup easily with this project template.
 
 **Scripts**
 
-* [browserify](https://github.com/browserify/browserify) for scripts bundling (using [vinyl-source-stream](https://github.com/hughsk/vinyl-source-stream) and [vinyl-buffer](https://github.com/hughsk/vinyl-buffer))
+* [gulp-bro](https://github.com/ngryman/gulp-bro) for scripts bundling
 * [gulp-uglify](https://github.com/terinjokes/gulp-uglify) for minifying javascript
 
 **Images**
@@ -40,6 +40,7 @@ Make HTML markup easily with this project template.
 * [gulp-if](https://github.com/robrich/gulp-if) for conditionally running a tasks
 * [multipipe](https://github.com/juliangruber/multipipe) for grouping conditional tasks
 * [through2](https://github.com/rvagg/through2) for custom pipes
+* [gulp-notify](https://github.com/mikaelbr/gulp-notify) for error notification
 * [gulp-progeny](https://github.com/HerringtonDarkholme/gulp-progeny) for incremental build
 * [gulp-rename](https://github.com/hparra/gulp-rename) for renaming minifyed files
 * [browser-sync](https://github.com/BrowserSync/browser-sync) for real-time browser testing
@@ -84,6 +85,9 @@ Change name, version, homepage and author information in `package.json` because 
 Then run `npm run start` to run the project. A new browser window will open with a BrowserSync server showing the finished files.
 
 Run `npm run build` for building version for production.
+
+Commands `npm run styles` and `npm run scripts` build production versions for styles and script respectively.
+
 * Notice: for using this project template not on OS Windows, change `build` script in `package.json` to:
 
       ...
