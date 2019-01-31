@@ -65,7 +65,7 @@ gulp.task('views', function () {
   var global = getJSON(paths.views.src + '/global.json');
 
   return gulp.src(paths.views.src + '/**/*.ejs', { since: gulp.lastRun('views') })
-    .pipe(progeny({ // TODO: there is a memory leak, need to investigate
+    .pipe(progeny({ // FIXME: there is a memory leak, need to investigate. Possible cause in gulp-ejs
       regexp: /<%-\s*include\(\s*['"]?([^'"]+)['"]?/,
       extensionsList: ['ejs']
     }))
@@ -83,9 +83,9 @@ gulp.task('views', function () {
       // Due to issue https://github.com/rogeriopvl/gulp-ejs/issues/86
       // was added custom error handler
       console.error(error.message);
-      notify.onError(function(err) { // TODO: did not working, need to investigate
+      notify.onError(function(err) { // FIXME: did not working, need to investigate
         return {
-          title: 'Styles',
+          title: 'Views',
           message: err.message
         }
       });

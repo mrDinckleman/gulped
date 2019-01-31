@@ -1,4 +1,5 @@
 .idea/
+materials/
 node_modules/
 public/
 .sass-cache/
