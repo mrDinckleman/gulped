@@ -79,19 +79,18 @@ gulp.task('views', function () {
       var data = getJSON(file.path.substr(0, file.path.indexOf(file.extname)) + '.json');
       return Object.assign({}, global, data);
     }))
-    .pipe(ejs({ production: !isDevelopment }, {}, { ext: '.html' })).on('error', function(error) {
-      // Due to issue https://github.com/rogeriopvl/gulp-ejs/issues/86
-      // was added custom error handler
-      console.error(error.message);
-      notify.onError(function(err) { // FIXME: did not working, need to investigate
-        return {
-          title: 'Views',
-          message: err.message
-        }
-      });
-      this.emit('end');
-    })
+    .pipe(ejs({
+      production: !isDevelopment
+    }))
+    .on('error', notify.onError(function(err) {
+      return {
+        title: 'Views',
+        // https://github.com/mikaelbr/gulp-notify/issues/106
+        message: 'Something went wrong' // err.message - TODO wait for fixing gulp-notify
+      }
+    }))
     .pipe(htmlComb())
+    .pipe(rename({ extname: '.html' }))
     .pipe(gulp.dest(paths.views.dest))
     .pipe(browserSync.stream());
 });
