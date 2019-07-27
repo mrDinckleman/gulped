@@ -1,51 +1,54 @@
 # Gulped [![devDependency Status][daviddm-image]][daviddm-url]
 
-> Project template based on [SASS](http://sass-lang.com/) and [EJS](http://ejs.co/) builded with [Gulp](https://gulpjs.com/)
+> Project template based on [SASS](http://sass-lang.com/) and [EJS](http://ejs.co/) bundled by [Gulp](https://gulpjs.com/)
 
 Make HTML markup easily with this project template.
+
+Follows the [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript).
 
 ## Technologies
 
 **Views**
 
-* [gulp-ejs](https://github.com/rogeriopvl/gulp-ejs) for creating static html-pages
-* [gulp-data](https://github.com/colynb/gulp-data) for filling ejs-templates with data from json-files
-* [gulp-htmlcomb](https://github.com/fengyuanchen/gulp-htmlcomb) for sorting html-attributes in accordance with [Code Guide](http://codeguide.co/#html-attribute-order) from [@mdo](https://github.com/mdo)
+* [gulp-ejs](https://www.npmjs.com/package/gulp-ejs) for creating static html-pages
+* [gulp-data](https://www.npmjs.com/package/gulp-data) for filling ejs-templates with data from json-files
+* [gulp-htmlcomb](https://www.npmjs.com/package/gulp-htmlcomb) for sorting html-attributes in accordance with [Code Guide](http://codeguide.co/#html-attribute-order) from [@mdo](https://github.com/mdo)
 
 **Styles**
 
-* [gulp-sass](https://github.com/dlmanning/gulp-sass) for styles
-* [gulp-postcss](https://github.com/postcss/gulp-postcss) for transforming styles with plugins:
-  + [postcss-import](https://github.com/postcss/postcss-import) for inline third-party CSS content
-  + [autoprefixer](https://github.com/postcss/autoprefixer) for adding vendor prefixes
-  + [cssnano](https://github.com/ben-eb/cssnano) for minifying css
-* [sanitize.css](https://github.com/jonathantneal/sanitize.css) for styles normalizations
-  + Notice: have been also considered [jonathantneal/normalize.css](https://github.com/jonathantneal/normalize.css) and [necolas/normalize.css](https://github.com/necolas/normalize.css)
-* [gulp-csscomb](https://github.com/koistya/gulp-csscomb) for sorting css-properties in accordance with [Code Guide](http://codeguide.co/#css-declaration-order) from [@mdo](https://github.com/mdo)
+* [gulp-sass](https://www.npmjs.com/package/gulp-sass) for compiling scss files
+* [gulp-postcss](https://www.npmjs.com/package/gulp-postcss) for transforming styles with plugins:
+  + [postcss-import](https://www.npmjs.com/package/postcss-import) for inline third-party CSS content
+  + [autoprefixer](https://www.npmjs.com/package/autoprefixer) for adding vendor prefixes
+  + [cssnano](https://www.npmjs.com/package/cssnano) for minifying css
+* [sanitize.css](https://www.npmjs.com/package/sanitize.css) for styles normalizations
 
 **Scripts**
 
-* [gulp-bro](https://github.com/ngryman/gulp-bro) for scripts bundling
-* [gulp-uglify](https://github.com/terinjokes/gulp-uglify) for minifying javascript
+* [gulp-bro](https://www.npmjs.com/package/gulp-bro) for scripts bundling
+* [@babel/core](https://www.npmjs.com/package/@babel/core), [@babel/preset-env](https://www.npmjs.com/package/@babel/preset-env), [@babel/register](https://www.npmjs.com/package/@babel/register), [babelify](https://www.npmjs.com/package/babelify) for transpiling ES6 code
+* [gulp-terser](https://www.npmjs.com/package/gulp-terser) for minifying javascript
 
 **Images**
 
-* [gulp-imagemin](https://github.com/sindresorhus/gulp-imagemin) for minifying images
+* [gulp-imagemin](https://www.npmjs.com/package/gulp-imagemin) for minifying images
 
 **Development**
 
-* [gulp](https://github.com/gulpjs/gulp) for project building
-* [gulp-sourcemaps](https://github.com/gulp-sourcemaps/gulp-sourcemaps) for source map support
-* [gulp-header](https://github.com/tracker1/gulp-header) for adding banner in styles and scripts
-* [gulp-if](https://github.com/robrich/gulp-if) for conditionally running a tasks
-* [multipipe](https://github.com/juliangruber/multipipe) for grouping conditional tasks
-* [through2](https://github.com/rvagg/through2) for custom pipes
-* [gulp-notify](https://github.com/mikaelbr/gulp-notify) for error notification
-* [gulp-progeny](https://github.com/HerringtonDarkholme/gulp-progeny) for incremental build
-* [gulp-rename](https://github.com/hparra/gulp-rename) for renaming minifyed files
-* [browser-sync](https://github.com/BrowserSync/browser-sync) for real-time browser testing
-* [del](https://github.com/sindresorhus/del) for clearing build directory
-* [gulp-zip](https://github.com/sindresorhus/gulp-zip) for production files packing
+* [gulp](https://www.npmjs.com/package/gulp) for project bundling
+* [gulp-sourcemaps](https://www.npmjs.com/package/gulp-sourcemaps) for source map support
+* [gulp-header](https://www.npmjs.com/package/gulp-header) for adding banner in styles and scripts
+* [gulp-if](https://www.npmjs.com/package/gulp-if) for conditionally running of tasks
+* [multipipe](https://www.npmjs.com/package/multipipe) for grouping conditional tasks
+* [through2](https://www.npmjs.com/package/through2) for custom pipes
+* [gulp-notify](https://www.npmjs.com/package/gulp-notify) for error notification
+* [gulp-cached](https://www.npmjs.com/package/gulp-cached), [gulp-progeny](https://www.npmjs.com/package/gulp-progeny) for incremental build
+* [eslint](https://www.npmjs.com/package/eslint), [eslint-config-airbnb-base](https://www.npmjs.com/package/eslint-config-airbnb-base), [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import), [babel-preset-airbnb](https://www.npmjs.com/package/babel-preset-airbnb) for codestyle
+* [gulp-rename](https://www.npmjs.com/package/gulp-rename) for renaming minifyed files
+* [browser-sync](https://www.npmjs.com/package/browser-sync) for real-time browser testing
+* [del](https://www.npmjs.com/package/del) for clearing build directory
+* [gulp-zip](https://www.npmjs.com/package/gulp-zip) for production files packing
+* [yargs](https://www.npmjs.com/package/yargs) for parsing command line arguments
 
 ## File structure
 
@@ -53,9 +56,9 @@ Make HTML markup easily with this project template.
     ├── app               # Source files
     │   ├── fonts         # Fonts
     │   ├── images        # Images
-    │   ├── scripts       # JS files
+    │   ├── js            # JS files
+    │   ├── scss          # SCSS files
     │   ├── static        # Static files
-    │   ├── styles        # SCSS files
     │   └── views         # EJS files
     ├── public            # Compiled files
     │   └── assets
@@ -67,8 +70,7 @@ Make HTML markup easily with this project template.
  
 ## Usage
 
-Install node.js.
-* Notice: not tested with versions other than node.js 9.4.0 (64-bit) and npm 5.6.0.
+Install Node.js.
 
 Install Gulp CLI:
 
@@ -88,12 +90,6 @@ Run `npm run build` for building version for production.
 
 Commands `npm run styles` and `npm run scripts` build production versions for styles and script respectively.
 
-* Notice: for using this project template not on OS Windows, change `build` script in `package.json` to:
-
-      ...
-      "build": "NODE_ENV=production gulp build",
-      ...
-
 **Views**
 
 To add global template data, specify it in `app/views/global.json`.
@@ -102,9 +98,9 @@ To add new template like `page.ejs`, place it to the `app/views` directory. You 
 
 **Scripts**
 
-To add vendor scripts, just require it in `app/scripts/app.js` like:
+To add vendor scripts, just import it in `app/scripts/app.js` like:
 
-    var $ = require('jquery');
+    import $ from 'jquery';
 
 **Static**
 

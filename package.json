@@ -1,12 +1,12 @@
 {
   "name": "gulped",
-  "version": "0.9.3",
-  "description": "Project template based on SASS and EJS builded with Gulp",
+  "version": "1.0.0",
+  "description": "Project template based on SASS and EJS bundled by Gulp",
   "scripts": {
     "start": "gulp",
-    "build": "set NODE_ENV=production&& gulp build",
-    "styles": "set NODE_ENV=production&& gulp styles",
-    "scripts": "set NODE_ENV=production&& gulp scripts",
+    "build": "gulp build -p",
+    "styles": "gulp styles -p",
+    "scripts": "gulp scripts -p",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -19,32 +19,41 @@
   "bugs": "https://github.com/mrDinckleman/gulped/issues",
   "license": "MIT",
   "devDependencies": {
-    "autoprefixer": "^9.5.1",
-    "browser-sync": "^2.26.3",
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/register": "^7.4.4",
+    "autoprefixer": "^9.6.1",
+    "babel-preset-airbnb": "^4.0.1",
+    "babelify": "^10.0.0",
+    "browser-sync": "^2.26.7",
     "cssnano": "^4.1.10",
-    "del": "^4.1.0",
-    "gulp": "^4.0.1",
+    "del": "^5.0.0",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.17.2",
+    "gulp": "^4.0.2",
     "gulp-bro": "^1.0.3",
-    "gulp-csscomb": "^3.0.8",
+    "gulp-cached": "^1.1.1",
     "gulp-data": "^1.3.1",
-    "gulp-ejs": "^4.0.0",
-    "gulp-header": "^2.0.7",
+    "gulp-ejs": "^4.1.1",
+    "gulp-header": "^2.0.9",
     "gulp-htmlcomb": "^0.2.0",
-    "gulp-if": "^2.0.2",
-    "gulp-imagemin": "^5.0.3",
+    "gulp-if": "^3.0.0",
+    "gulp-imagemin": "^6.0.0",
     "gulp-notify": "^3.2.0",
     "gulp-postcss": "^8.0.0",
     "gulp-progeny": "^0.4.1",
     "gulp-rename": "^1.4.0",
     "gulp-sass": "^4.0.2",
     "gulp-sourcemaps": "^2.6.5",
-    "gulp-uglify": "^3.0.2",
-    "gulp-zip": "^4.2.0",
+    "gulp-terser": "^1.2.0",
+    "gulp-zip": "^5.0.0",
     "multipipe": "^3.0.1",
     "postcss-import": "^12.0.1",
-    "through2": "^3.0.1"
+    "through2": "^3.0.1",
+    "yargs": "^13.3.0"
   },
   "dependencies": {
-    "sanitize.css": "^8.0.0"
+    "sanitize.css": "^11.0.0"
   }
 }
