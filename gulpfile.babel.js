@@ -31,7 +31,6 @@ import pkg from './package';
 const through2 = through2Module.obj;
 const browserSync = browserSyncModule.create();
 
-// const isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 const { argv } = yargs;
 const isDevelopment = !argv.p;
 
