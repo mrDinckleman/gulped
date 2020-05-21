@@ -1,7 +1,6 @@
 import gulp from 'gulp';
 import ejs from 'gulp-ejs';
 import data from 'gulp-data';
-import htmlComb from 'gulp-htmlcomb';
 import sass from 'gulp-sass';
 import header from 'gulp-header';
 import postCss from 'gulp-postcss';
@@ -26,7 +25,7 @@ import fs from 'fs';
 import path from 'path';
 import yargs from 'yargs';
 
-import pkg from './package';
+import pkg from './package.json';
 
 const through2 = through2Module.obj;
 const browserSync = browserSyncModule.create();
@@ -100,13 +99,13 @@ export function views() {
       const local = getJSON(`${file.path.substr(0, file.path.indexOf(file.extname))}.json`);
       return { ...global, ...local };
     }))
-    .on('error', notify.onError(err => ({
+    .on('error', notify.onError((err) => ({
       title: 'Data',
       message: err.message,
     })))
     .pipe(ejs({ production: !isDevelopment }))
     .on('error', notify.onError((err) => {
-      console.error(err.message);
+      console.error(err.message); // eslint-disable-line no-console
 
       return {
         title: 'Views',
@@ -114,7 +113,6 @@ export function views() {
         message: 'Something went wrong', // err.message - TODO wait for fixing gulp-notify
       };
     }))
-    .pipe(htmlComb())
     .pipe(rename({ extname: '.html' }))
     .pipe(gulp.dest(paths.views.dest))
     .pipe(browserSync.stream());
@@ -159,7 +157,7 @@ function updateUtime() {
 
       cb();
     }))
-    .on('error', notify.onError(err => ({
+    .on('error', notify.onError((err) => ({
       title: 'Data',
       message: err.message,
     })));
@@ -177,7 +175,7 @@ export function styles() {
     .pipe(cached('styles'))
     .pipe(progeny())
     .pipe(sass({ includePaths: [path.join(__dirname, '/node_modules/')] }))
-    .on('error', notify.onError(err => ({
+    .on('error', notify.onError((err) => ({
       title: 'Styles',
       message: err.message,
     })))
@@ -205,7 +203,7 @@ export function scripts() {
       debug: true,
       error: 'emit',
     }))
-    .on('error', notify.onError(err => ({
+    .on('error', notify.onError((err) => ({
       title: 'Scripts',
       message: err.message,
     })))
