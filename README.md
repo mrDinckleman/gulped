@@ -12,7 +12,6 @@ Follows the [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript
 
 * [gulp-ejs](https://www.npmjs.com/package/gulp-ejs) for creating static html-pages
 * [gulp-data](https://www.npmjs.com/package/gulp-data) for filling ejs-templates with data from json-files
-* [gulp-htmlcomb](https://www.npmjs.com/package/gulp-htmlcomb) for sorting html-attributes in accordance with [Code Guide](http://codeguide.co/#html-attribute-order) from [@mdo](https://github.com/mdo)
 
 **Styles**
 
@@ -67,7 +66,7 @@ Follows the [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript
     │       ├── fonts     # Fonts
     │       └── js        # JS files
     └── release           # ZIP-archives with compiled files
- 
+
 ## Usage
 
 Install Node.js.
