@@ -1,0 +1,12 @@
+// ------ Mixins and Functions ------ //
+@import "../helpers/functions";
+@import "../helpers/mixins";
+
+// ------ Variables ------ //
+@import "../variables/colors";
+
+// ------ Vendors ------ //
+@import "sanitize.css";
+
+// ------ Blocks ------ //
+@import "../blocks/main/index";

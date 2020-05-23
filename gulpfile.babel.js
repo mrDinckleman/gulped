@@ -39,19 +39,19 @@ const paths = {
     dest: 'public',
   },
   styles: {
-    src: 'app/scss',
+    src: 'app/assets',
     dest: 'public/assets/css',
   },
   scripts: {
-    src: 'app/js',
+    src: 'app/assets',
     dest: 'public/assets/js',
   },
   images: {
-    src: 'app/images',
+    src: 'app/assets/images',
     dest: 'public/assets/images',
   },
   fonts: {
-    src: 'app/fonts',
+    src: 'app/assets/fonts',
     dest: 'public/assets/fonts',
   },
   statics: {
@@ -169,11 +169,20 @@ export function styles() {
     rename({ suffix: '.min' }),
     gulp.dest(paths.styles.dest),
   );
+  const base = `${paths.styles.src}/entry`;
 
-  return gulp.src(`${paths.styles.src}/**/*.scss`)
+  return gulp.src(`${paths.styles.src}/**/*.scss`, { base })
     .pipe(sourceMaps.init())
     .pipe(cached('styles'))
     .pipe(progeny())
+    // Use files only from the entry points directory
+    .pipe(through2(function entryPoints(file, enc, cb) {
+      if (file.path.includes(path.resolve(base))) {
+        this.push(file);
+      }
+
+      return cb();
+    }))
     .pipe(sass({ includePaths: [path.join(__dirname, '/node_modules/')] }))
     .on('error', notify.onError((err) => ({
       title: 'Styles',
@@ -194,7 +203,7 @@ export function scripts() {
     gulp.dest(paths.scripts.dest),
   );
 
-  return gulp.src(`${paths.scripts.src}/app.js`)
+  return gulp.src(`${paths.scripts.src}/entry/*.js`)
     .pipe(bro({
       transform: [
         ['babelify', { presets: ['@babel/preset-env'] }],
@@ -210,7 +219,6 @@ export function scripts() {
     .pipe(sourceMaps.init({ loadMaps: true }))
     .pipe(header(banner, { pkg }))
     .pipe(sourceMaps.write(isDevelopment ? './' : undefined))
-    // .pipe(gulpIf(isDevelopment, sourceMaps.write('./'), sourceMaps.write()))
     .pipe(gulp.dest(paths.scripts.dest))
     .pipe(gulpIf(!isDevelopment, minify))
     .pipe(browserSync.stream());
